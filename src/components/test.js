@@ -15,6 +15,7 @@ function Test() {
                             choices: tests[index].choices,
                             good: tests[index].good
                         }, ...tests.slice(index + 1)])} placeholder={"Название вопроса"}/>
+                        <form >
                         {tests[index].choices.map((item,index) => {
                             return (
                                 <>
@@ -26,9 +27,17 @@ function Test() {
                                         good: tests[ind].good
                                     }, ...tests.slice(ind + 1)])
                                 }}/>
+                                <input type="radio" name="good" value={item}  onChange={(e) => {
+                                    setTests([...tests.slice(0, ind), {
+                                        title: tests[ind].title,
+                                        choices: [...tests[ind].choices],
+                                        good: e.target.value
+                                    }, ...tests.slice(ind + 1)])
+                                }}/><br />
                             </>
                             )
                          })}
+                         </form>
                          <button onClick={(e) => {
                              e.preventDefault();
                              setTests([...tests.slice(0, index), {
