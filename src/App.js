@@ -3,6 +3,7 @@ import Test from './components/test';
 function App() {
   const [tests, setTests] = useState([]);
   const [type, setType] = useState('Выберите тип');
+  const [name, setName] = useState();
   return (
     <>
       <div>
@@ -29,7 +30,7 @@ function App() {
           <input type="text" name="img" placeholder="url изображения" />
          {type != 'Тест' ? <input type="file" name="file"/> : 
          <>
-         <input type="text" placeholder="Название теста"/>
+         <input type="text" value={name} onChange={(e) => {setName(e.target.value)}} placeholder="Название теста"/>
          {
              tests.map((item,index) => {
                 const ind = index;
@@ -86,18 +87,18 @@ function App() {
      </>
          } 
           <input type="submit" onClick={async (e) => {
-              e.preventDefault();
-              let formData = new FormData(test);
-              //formData.append("tests", JSON.stringify(tests));
-              console.log(formData);
-             await fetch('http://localhost:3000/content', {
-               method: 'POST',
-               mode: 'no-cors',
-               body: formData,
-               headers: {
-
-               }
-             })
+              if (type == 'Тест') {
+                e.preventDefault();
+                let formData = new FormData(test);
+                formData.append("tests", JSON.stringify([...tests]));
+                formData.append("name", name);
+                console.log(JSON.stringify(formData));
+              await fetch('http://localhost:3000/content', {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData,
+              })
+            }
           }}/>
         </form>
       </div>
